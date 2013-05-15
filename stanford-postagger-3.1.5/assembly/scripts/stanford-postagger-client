@@ -1,0 +1,29 @@
+#!/usr/bin/env bash
+#
+
+CURR_PWD=$PWD
+cd $(dirname $0)
+SCRIPT_PWD=${PWD}
+cd $CURR_PWD
+
+if [[ ""$SPT_CLASSPATH"" == """" ]]
+then
+	LIB=${SCRIPT_PWD}/../lib
+	JARS=($(find $LIB -type f -name "*.jar"))
+	for index in "${!JARS[@]}"
+	do
+		if [ $index -eq 0 ]
+		then
+			SPT_CLASSPATH=${JARS[$index]}
+		else
+			SPT_CLASSPATH="$SPT_CLASSPATH:${JARS[$index]}"
+		fi
+	done
+fi
+
+if [ $# -eq 0 ]
+then
+	java -cp $SPT_CLASSPATH edu.stanford.nlp.tagger.maxent.MaxentTaggerServer -client -host localhost -port 2020 
+else
+	java -cp $SPT_CLASSPATH edu.stanford.nlp.tagger.maxent.MaxentTaggerServer -client $@ &
+fi

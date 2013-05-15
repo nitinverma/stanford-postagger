@@ -1,0 +1,49 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2"
+          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.2 http://maven.apache.org/xsd/assembly-1.1.2.xsd">
+    <id>pkg</id>
+
+    <formats>
+        <format>dir</format>
+        <format>tar</format>
+    </formats>
+
+    <baseDirectory>${project.artifactId}-${project.version}</baseDirectory>
+    <includeBaseDirectory>false</includeBaseDirectory>
+
+
+    <dependencySets>
+        <dependencySet>
+            <unpack>false</unpack>
+            <scope>runtime</scope>
+            <outputDirectory>lib</outputDirectory>
+        </dependencySet>
+    </dependencySets>
+
+    <files>
+    </files>
+
+    <fileSets>
+        <fileSet>
+            <directory>scripts</directory>
+            <outputDirectory>bin</outputDirectory>
+            <fileMode>0755</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>demos</directory>
+            <outputDirectory>demos</outputDirectory>
+            <fileMode>0400</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>samples</directory>
+            <outputDirectory>samples</outputDirectory>
+            <fileMode>0400</fileMode>
+        </fileSet>
+        <fileSet>
+            <directory>models</directory>
+            <outputDirectory>models</outputDirectory>
+            <fileMode>0400</fileMode>
+        </fileSet>
+    </fileSets>
+
+</assembly>

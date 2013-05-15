@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#
+
+PIDS=$(ps -eafwww | grep java | grep edu.stanford.nlp.tagger.maxent.MaxentTaggerServer | awk ' { print $2 } ')
+if [[ ""$PIDS"" != """" ]]
+then
+	echo "Found running at $PIDS"
+	kill -9 $PIDS
+	echo "... killed"
+fi

@@ -1,0 +1,34 @@
+#!/usr/bin/env bash
+#
+
+CURR_PWD=$PWD
+cd $(dirname $0)
+SCRIPT_PWD=${PWD}
+cd $CURR_PWD
+
+$SCRIPT_PWD/stanford-postagger-server-stop
+LOGS=$SCRIPT_PWD/../logs
+mkdir -p $LOGS
+
+if [[ ""$SPT_CLASSPATH"" == """" ]]
+then
+	LIB=${SCRIPT_PWD}/../lib
+	JARS=($(find $LIB -type f -name "*.jar"))
+	for index in "${!JARS[@]}"
+	do
+		if [ $index -eq 0 ]
+		then
+			SPT_CLASSPATH=${JARS[$index]}
+		else
+			SPT_CLASSPATH="$SPT_CLASSPATH:${JARS[$index]}"
+		fi
+	done
+fi
+
+if [ $# -eq 0 ]
+then
+	java -mx300m -cp $SPT_CLASSPATH edu.stanford.nlp.tagger.maxent.MaxentTaggerServer -model edu/stanford/nlp/models/pos-tagger/english-left3words/english-left3words-distsim.tagger -port 2020 >> $LOGS/stanford-postagger-server.log 2>&1 &
+else
+	java -mx300m -cp $SPT_CLASSPATH edu.stanford.nlp.tagger.maxent.MaxentTaggerServer $@  >> $LOGS/stanford-postagger-server.log 2>&1 &
+fi
+exit 0

@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+CURR_PWD=$PWD
+cd $(dirname $0)
+SCRIPT_PWD=${PWD}
+cd $CURR_PWD
+
+if [[ ""$SPT_CLASSPATH"" == """" ]]
+then
+	LIB=${SCRIPT_PWD}/../lib
+	JARS=($(find $LIB -type f -name "*.jar"))
+	for index in "${!JARS[@]}"
+	do
+		SPT_CLASSPATH="$SPT_CLASSPATH:${JARS[$index]}"
+	done
+fi
+
+java -mx200m -cp $SPT_CLASSPATH edu.stanford.nlp.tagger.maxent.MaxentTaggerGUI

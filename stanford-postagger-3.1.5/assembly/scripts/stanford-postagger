@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+#
+# usage: ./stanford-postagger.sh -model model -textFile textFile
+#  e.g., ./stanford-postagger.sh -model models/english-left3words-distsim.tagger -textFile sample-input.txt
+
+CURR_PWD=$PWD
+cd $(dirname $0)
+SCRIPT_PWD=${PWD}
+cd $CURR_PWD
+
+if [[ ""$SPT_CLASSPATH"" == """" ]]
+then
+	LIB=${SCRIPT_PWD}/../lib
+	JARS=($(find $LIB -type f -name "*.jar"))
+	for index in "${!JARS[@]}"
+	do
+		if [ $index -eq 0 ]
+		then
+			SPT_CLASSPATH=${JARS[$index]}
+		else
+			SPT_CLASSPATH="$SPT_CLASSPATH:${JARS[$index]}"
+		fi
+	done
+fi
+
+java -mx300m -cp ${SPT_CLASSPATH} edu.stanford.nlp.tagger.maxent.MaxentTagger $@
+
